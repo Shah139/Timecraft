@@ -29,35 +29,39 @@ class StatsController extends GetxController {
   }
   
   // Calculate weekly statistics for the chart
-  void calculateWeeklyStats() {
-    weeklyStats.clear();
-    
-    // Get the start of the current week (Sunday)
-    final now = DateTime.now();
-    final currentWeekStart = now.subtract(Duration(days: now.weekday % 7));
-    
-    // Generate stats for each day of the week
-    for (int i = 0; i < 7; i++) {
-      final day = currentWeekStart.add(Duration(days: i));
-      final dayTasks = homeController.allTasks.where((task) => 
-        task.date.year == day.year && 
-        task.date.month == day.month && 
-        task.date.day == day.day &&
-        !task.isCancelled
-      ).toList();
-      
-      double dayProgress = 0.0;
-      if (dayTasks.isNotEmpty) {
-        int completed = dayTasks.where((task) => task.isCompleted).length;
-        dayProgress = (completed / dayTasks.length) * 100;
-      }
-      
-      weeklyStats.add({
-        'day': _getDayName(day.weekday),
-        'progress': dayProgress,
-      });
+ void calculateWeeklyStats() {
+  weeklyStats.clear();
+
+  final now = DateTime.now();
+  final lastSunday = now.subtract(Duration(days: now.weekday % 7));
+
+  List<Map<String, dynamic>> tempStats = [];
+
+  for (int i = 0; i < 7; i++) {
+    final day = lastSunday.add(Duration(days: i));
+    final dayTasks = homeController.allTasks.where((task) =>
+      task.date.year == day.year &&
+      task.date.month == day.month &&
+      task.date.day == day.day &&
+      !task.isCancelled
+    ).toList();
+
+    double dayProgress = 0.0;
+    if (dayTasks.isNotEmpty) {
+      int completed = dayTasks.where((task) => task.isCompleted).length;
+      dayProgress = (completed / dayTasks.length) * 100;
     }
+
+    tempStats.add({
+      'day': _getDayName(day.weekday),
+      'progress': dayProgress,
+    });
   }
+
+  // Sort so it matches the order in the UI: [Sun, Mon, Tue, ... Sat]
+  weeklyStats.assignAll(tempStats);
+}
+
   
   // Get day name from weekday integer
   String _getDayName(int weekday) {
