@@ -10,20 +10,17 @@ class StatsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Statistics")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Obx(() => Text(
-                  "Overall Progress: ${controller.overallProgress.value.toStringAsFixed(2)}%",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                )),
-            const SizedBox(height: 20),
-            BarChartWidget(), // Add the bar chart here
+       body: Column(
+        children: [
+          const SizedBox(height: 20),
+          Obx(() => Text(
+                "Overall Progress: ${controller.overallProgress.value.toStringAsFixed(2)}%",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              )),
+          const SizedBox(height: 20),
+          BarChartWidget(), // Add the bar chart here
           ],
         ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 2, // Add Task tab is selected
         onTap: (index) {

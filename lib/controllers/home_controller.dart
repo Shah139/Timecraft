@@ -71,10 +71,13 @@ class HomeController extends GetxController {
     );
     
     allTasks.add(task);
+    allTasks.refresh();
+
     if (isToday(date)) {
       calculateTodayProgress();
     }
     saveTasks();
+    update();
   }
   
   // Check if a date is today

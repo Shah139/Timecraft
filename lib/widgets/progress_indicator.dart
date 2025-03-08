@@ -89,6 +89,8 @@ class LinearProgressIndicatorWidget extends StatelessWidget {
   }
 }
 
+
+
 class ProgressBadge extends StatelessWidget {
   final double percentage;
   final Color backgroundColor;

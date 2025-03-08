@@ -7,11 +7,19 @@ class StatsController extends GetxController {
   final RxList<Map<String, dynamic>> weeklyStats = <Map<String, dynamic>>[].obs;
   
   @override
-  void onInit() {
-    super.onInit();
+void onInit() {
+  super.onInit();
+  ever(homeController.allTasks, (_) {
     calculateOverallProgress();
     calculateWeeklyStats();
-  }
+  });
+
+  // Optional: Initial delayed call
+  Future.delayed(Duration(milliseconds: 500), () {
+    calculateOverallProgress();
+    calculateWeeklyStats();
+  });
+}
   
   // Calculate the overall progress percentage across all tasks
   void calculateOverallProgress() {
@@ -25,44 +33,49 @@ class StatsController extends GetxController {
     }
     
     int completed = nonCancelledTasks.where((task) => task.isCompleted).length;
-    overallProgress.value = (completed / nonCancelledTasks.length) * 100;
+    double percentage_of_all = (completed / nonCancelledTasks.length) * 100;
+    overallProgress.value = percentage_of_all;
   }
   
   // Calculate weekly statistics for the chart
- void calculateWeeklyStats() {
-  weeklyStats.clear();
-
-  final now = DateTime.now();
-  final lastSunday = now.subtract(Duration(days: now.weekday % 7));
-
-  List<Map<String, dynamic>> tempStats = [];
-
-  for (int i = 0; i < 7; i++) {
-    final day = lastSunday.add(Duration(days: i));
-    final dayTasks = homeController.allTasks.where((task) =>
-      task.date.year == day.year &&
-      task.date.month == day.month &&
-      task.date.day == day.day &&
-      !task.isCancelled
-    ).toList();
-
-    double dayProgress = 0.0;
-    if (dayTasks.isNotEmpty) {
-      int completed = dayTasks.where((task) => task.isCompleted).length;
-      dayProgress = (completed / dayTasks.length) * 100;
+    void calculateWeeklyStats() {
+    weeklyStats.clear();
+    
+    // Get the start of the current week (Sunday)
+    final now = DateTime.now();
+    final currentWeekStart = now.subtract(Duration(days: now.weekday -1));
+    print(currentWeekStart);
+    
+    // Generate stats for each day of the week
+    for (int i = 0; i < 7; i++) {
+      final day = currentWeekStart.add(Duration(days: i));
+      final dayTasks = homeController.allTasks.where((task) => 
+        task.date.year == day.year && 
+        task.date.month == day.month && 
+        task.date.day == day.day &&
+        !task.isCancelled
+      ).toList();
+      print("Tasks for ${_getDayName(day.weekday)}: ${dayTasks.length}");
+      
+      double dayProgress = 0.0;
+      if (dayTasks.isNotEmpty) {
+        int completed = dayTasks.where((task) => task.isCompleted).length;
+        dayProgress = (completed / dayTasks.length) * 100;
+      }
+      
+      weeklyStats.add({
+        'day': _getDayName(day.weekday),
+        'progress': dayProgress,
+      });
+      print("Weekly Stats: $weeklyStats");
     }
-
-    tempStats.add({
-      'day': _getDayName(day.weekday),
-      'progress': dayProgress,
-    });
   }
 
-  // Sort so it matches the order in the UI: [Sun, Mon, Tue, ... Sat]
-  weeklyStats.assignAll(tempStats);
-}
 
-  
+
+
+
+
   // Get day name from weekday integer
   String _getDayName(int weekday) {
     switch (weekday) {
@@ -76,7 +89,7 @@ class StatsController extends GetxController {
       default: return '';
     }
   }
-  
+
   // Refresh all stats
   void refreshStats() {
     calculateOverallProgress();

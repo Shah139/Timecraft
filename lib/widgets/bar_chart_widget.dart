@@ -34,7 +34,7 @@ class BarChartWidget extends StatelessWidget {
                               x: entry.key,
                               barRods: [
                                 BarChartRodData(
-                                  toY: entry.value["progress"].toDouble(),
+                                  toY: entry.value['progress'].toDouble(),
                                   color: Colors.lightGreen,
                                   width: 16,
                                   borderRadius: BorderRadius.circular(8),
@@ -53,10 +53,14 @@ class BarChartWidget extends StatelessWidget {
                         sideTitles: SideTitles(
                           showTitles: true,
                           getTitlesWidget: (value, meta) {
-                            return Text(
-                              controller.weeklyStats[value.toInt()]["day"],
+                            int index = value.toInt();
+                            if (index >= 0 && index < controller.weeklyStats.length) {
+                               return Text(
+                              controller.weeklyStats[index]["day"],
                               style: TextStyle(fontSize: 12),
-                            );
+                              );
+                            }
+                            return Text(""); 
                           },
                         ),
                       ),
