@@ -116,55 +116,122 @@ class AddTaskView extends GetView<AddTaskController> {
   void _showAddTaskDialog(BuildContext context) {
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
+    String selectedPriority = 'Medium'; // Default priority
     
     Get.dialog(
-      AlertDialog(
-        title: Text('Add Task for ${_formatDate(controller.selectedDate.value)}'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                hintText: 'Enter task title',
+      StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text('Add Task for ${_formatDate(controller.selectedDate.value)}'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: titleController,
+                    decoration: const InputDecoration(
+                      labelText: 'Title',
+                      hintText: 'Enter task title',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                      hintText: 'Enter task description',
+                    ),
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Priority:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Priority selection
+                  Row(
+                    children: [
+                      _priorityButton(
+                        'Low', 
+                        Colors.green, 
+                        selectedPriority == 'Low', 
+                        () => setState(() => selectedPriority = 'Low')
+                      ),
+                      const SizedBox(width: 8),
+                      _priorityButton(
+                        'Medium', 
+                        Colors.orange, 
+                        selectedPriority == 'Medium', 
+                        () => setState(() => selectedPriority = 'Medium')
+                      ),
+                      const SizedBox(width: 8),
+                      _priorityButton(
+                        'High', 
+                        Colors.red, 
+                        selectedPriority == 'High', 
+                        () => setState(() => selectedPriority = 'High')
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description',
-                hintText: 'Enter task description',
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: const Text('Cancel'),
               ),
-              maxLines: 3,
-            ),
-          ],
+              TextButton(
+                onPressed: () {
+                  if (titleController.text.isNotEmpty) {
+                    controller.addTask(
+                      titleController.text,
+                      descriptionController.text,
+                      selectedPriority,
+                    );
+                    Get.back();
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      'Title cannot be empty',
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+                },
+                child: const Text('Add'),
+              ),
+            ],
+          );
+        }
+      ),
+    );
+  }
+  
+  Widget _priorityButton(String label, Color color, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withOpacity(0.2) : Colors.transparent,
+          border: Border.all(
+            color: isSelected ? color : Colors.grey.shade400,
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.circular(20),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? color : Colors.grey.shade700,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
-          TextButton(
-            onPressed: () {
-              if (titleController.text.isNotEmpty) {
-                controller.addTask(
-                  titleController.text,
-                  descriptionController.text,
-                );
-                Get.back();
-              } else {
-                Get.snackbar(
-                  'Error',
-                  'Title cannot be empty',
-                  snackPosition: SnackPosition.BOTTOM,
-                );
-              }
-            },
-            child: const Text('Add'),
-          ),
-        ],
+        ),
       ),
     );
   }

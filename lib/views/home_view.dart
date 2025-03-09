@@ -72,6 +72,7 @@ class HomeView extends GetView<HomeController> {
             child: Obx(() => _buildProgressCard()),
             ),
           ),
+          
 
 
           const SizedBox(height: 10),
@@ -128,24 +129,41 @@ class HomeView extends GetView<HomeController> {
 
   }
   
-  Widget _buildProgressCard() {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            CircularProgressIndicatorWidget(
-            percentage: controller.progressPercentage.value / 100, 
-            backgroundColor: Colors.white.withOpacity(0.3),
-            progressColor: Colors.white,
+ Widget _buildProgressCard() {
+  return Stack(
+    clipBehavior: Clip.none, // Allow overflow
+    children: [
+      Card(
+        margin: EdgeInsets.all(16), // Adjust this if necessary
+        child: Container(
+          height: 320,
+          width: 350, // Adjust height if needed
+          padding: EdgeInsets.all(16), // Reduce this if needed
+          child: Column(
+            children: [
+              Text(
+                " ",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+            ],
           ),
-          ],
         ),
       ),
-    );
-  }
+
+      // Circular Progress Indicator Overlapping
+      Positioned(
+        top: 40,
+        left: 0,
+        right: 0,
+        child: CircularProgressIndicatorWidget(
+          percentage: controller.progressPercentage.value / 100,
+        ),
+      ),
+    ],
+  );
+}
+
   
   Widget _buildTasksList() {
     final todayTasks = controller.todayTasks;
@@ -157,6 +175,7 @@ class HomeView extends GetView<HomeController> {
     }
     
     return ListView.builder(
+      scrollDirection: Axis.horizontal,
       itemCount: todayTasks.length,
       itemBuilder: (context, index) {
         final task = todayTasks[index];

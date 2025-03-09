@@ -33,8 +33,8 @@ class AddTaskController extends GetxController {
   }
   
   // Add a new task for the selected date
-  void addTask(String title, String description) {
-    homeController.addTask(title, description, selectedDate.value);
+  void addTask(String title, String description, [String priority = 'Medium']) {
+    homeController.addTask(title, description, selectedDate.value, priority: priority);
     updateTasksForSelectedDate();
   }
 }

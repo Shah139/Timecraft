@@ -62,12 +62,13 @@ class HomeController extends GetxController {
   }
   
   // Add a new task
-  void addTask(String title, String description, DateTime date) {
+  void addTask(String title, String description, DateTime date, {String priority = 'Medium'}) {
     final task = Task(
       id: const Uuid().v4(),
       title: title,
       description: description,
       date: date,
+      priority: priority,
     );
     
     allTasks.add(task);
@@ -90,9 +91,21 @@ class HomeController extends GetxController {
   
   // These methods will be replaced with Firebase later
   void loadTasks() {
-    // For demo, let's add some sample tasks
-    addTask('Finish Project Report', 'Complete the quarterly report', DateTime.now());
-    addTask('Buy Groceries', 'Milk, eggs, bread', DateTime.now());
+    // For demo, let's add some sample tasks with priorities
+    addTask(
+      'Finish Project Report', 
+      'Complete the quarterly report', 
+      DateTime.now(),
+      priority: 'High'
+    );
+    
+    addTask(
+      'Buy Groceries', 
+      'Milk, eggs, bread', 
+      DateTime.now(),
+      priority: 'Medium'
+    );
+    
     calculateTodayProgress();
   }
   

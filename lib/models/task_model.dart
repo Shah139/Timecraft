@@ -5,6 +5,7 @@ class Task {
   DateTime date;
   bool isCompleted;
   bool isCancelled;
+  String priority; 
 
   Task({
     required this.id,
@@ -13,6 +14,7 @@ class Task {
     required this.date,
     this.isCompleted = false,
     this.isCancelled = false,
+    this.priority = 'Medium',
   });
 
   // Convert Task to JSON
@@ -24,6 +26,7 @@ class Task {
       'date': date.toIso8601String(),
       'isCompleted': isCompleted,
       'isCancelled': isCancelled,
+      'priority' : priority,
     };
   }
 
@@ -36,6 +39,7 @@ class Task {
       date: DateTime.parse(json['date']),
       isCompleted: json['isCompleted'],
       isCancelled: json['isCancelled'],
+      priority: json['priority'] ?? 'Medium',
     );
   }
 }
