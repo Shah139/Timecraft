@@ -1,25 +1,22 @@
 # 🕒 TIMECRAFT - Smart Task Manager
 
 ## 📌 Overview
-TIMECRAFT is a productivity-enhancing to-do app built with **Flutter** and **GetX** for state management. It helps users efficiently manage tasks, set reminders, and stay organized.
+TIMECRAFT is a productivity-enhancing to-do app built with **Flutter** and **GetX** for state management. It helps users efficiently manage tasks and stay organized.
 
-## 🚀 Features
-✅ Add, edit, and delete tasks  
-✅ Set task deadlines and reminders  
-✅ Categorize tasks with labels  
-✅ Dark mode support  
-✅ Cloud storage sync with Firebase  
-✅ User authentication (Email & Password)  
+- Used GetX for state management
+- Integrated elements like Circular Progress Indicator, Bar Chart, - Calendar
+- Fixed ndK-version & Kotlin bug (took 3 hours just to find it! 🙏)
+- Optimized UI with Stack for efficiency
+- wrapped it up in 15 hours!
 
 ## 📸 Screenshots
 ### 🏠 Home Screen
-![Home Screen](screenshots/home_screen.png)
+![Home Screen](https://github.com/user-attachments/assets/49cbe623-9407-45d6-be77-603b79b2de36)
 
 ### 📅 Task List
-![Task List](screenshots/task_list.png)
-
-### 🔔 Notifications
-![Task Notification](screenshots/notification.png)
+![Task List](https://github.com/user-attachments/assets/3332ea40-e711-47d8-bd6d-1ed40ea6d670)
+![Adding task](https://github.com/user-attachments/assets/fe482535-c06a-456a-aa7f-bb1df6897831)
+![Weekly Review](https://github.com/user-attachments/assets/8511c1df-cb7a-4037-bf2f-32b44668ce33)
 
 ## 🛠 Installation
 ### 1️⃣ Prerequisites
@@ -42,11 +39,6 @@ flutter pub get
 flutter run
 ```
 
-## 🔥 Firebase Setup
-To enable Firebase features:
-1. Set up a Firebase project at [Firebase Console](https://console.firebase.google.com/)
-2. Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) and place them in `android/app/` and `ios/Runner/` respectively.
-3. Enable Firestore and Authentication services.
 
 ## 🤝 Contributing
 Contributions are welcome! Please fork the repository and submit a pull request.
